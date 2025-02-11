@@ -8,16 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RambamYomyNoatebook extends AppCompatActivity {
+public class MishnaYomitNoatebook extends AppCompatActivity {
     private EditText editTextNotebook;
     private SharedPreferences sharedPreferences;
-    private static final String NOTE_KEY = "saved_note_1";
+    private static final String NOTE_KEY = "saved_note_3";
     private Button buttonDelet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rambam_yomy_noatebook);
+        setContentView(R.layout.activity_mishna_yomit_noatebook);
 
         editTextNotebook = findViewById(R.id.editTextNotebook);
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
@@ -38,5 +38,6 @@ public class RambamYomyNoatebook extends AppCompatActivity {
             editTextNotebook.setText("");
             sharedPreferences.edit().putString(NOTE_KEY, "").apply();
         });
+
     }
 }

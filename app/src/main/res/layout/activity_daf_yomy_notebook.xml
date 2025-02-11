@@ -19,5 +19,12 @@
         android:id="@+id/buttonSaveNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="שמור הערה" />
+        android:text="שמור" />
+
+    <Button
+        android:id="@+id/buttonDelet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="מחק" />
+
 </LinearLayout>

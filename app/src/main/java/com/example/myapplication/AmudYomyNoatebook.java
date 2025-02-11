@@ -12,14 +12,16 @@ public class AmudYomyNoatebook extends AppCompatActivity {
     private EditText editTextNotebook;
     private SharedPreferences sharedPreferences;
     private static final String NOTE_KEY = "saved_note_2";
+    private Button buttonDelet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rambam_yomy_noatebook);
+        setContentView(R.layout.activity_amud_yomy_noatebook);
 
         editTextNotebook = findViewById(R.id.editTextNotebook);
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
+        buttonDelet = findViewById(R.id.buttonDelet);
 
         // טעינת ההערה השמורה
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
@@ -31,6 +33,10 @@ public class AmudYomyNoatebook extends AppCompatActivity {
                 String noteText = editTextNotebook.getText().toString();
                 sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
             }
+        });
+        buttonDelet.setOnClickListener(v -> {
+            editTextNotebook.setText("");
+            sharedPreferences.edit().putString(NOTE_KEY, "").apply();
         });
     }
 }

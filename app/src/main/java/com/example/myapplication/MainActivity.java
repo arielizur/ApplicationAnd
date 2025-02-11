@@ -41,6 +41,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button buttonOpenNotebook2 = findViewById(R.id.button4);
+        buttonOpenNotebook2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AmudYomyNoatebook.class);
+                startActivity(intent);
+            }
+        });
+        Button buttonOpenNotebook3 = findViewById(R.id.button5);
+        buttonOpenNotebook3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MishnaYomitNoatebook.class);
+                startActivity(intent);
+            }
+        });
         // כפתור תמונה שפותח חלון קופץ
         ImageButton imageButton = findViewById(R.id.imageButton);
         imageButton.setOnClickListener(this::showPopupWindow);

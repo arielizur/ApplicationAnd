@@ -12,6 +12,7 @@ public class DafYomyNotebook extends AppCompatActivity {
     private EditText editTextNotebook;
     private SharedPreferences sharedPreferences;
     private static final String NOTE_KEY = "saved_note";
+    private Button buttonDelet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class DafYomyNotebook extends AppCompatActivity {
 
         editTextNotebook = findViewById(R.id.editTextNotebook);
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
+        buttonDelet = findViewById(R.id.buttonDelet);
 
         // טעינת ההערה השמורה
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
@@ -32,5 +34,10 @@ public class DafYomyNotebook extends AppCompatActivity {
                 sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
             }
         });
+        buttonDelet.setOnClickListener(v -> {
+            editTextNotebook.setText("");
+            sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+        });
+
     }
 }
