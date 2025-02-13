@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AmudYomyNoatebook extends AppCompatActivity {
+public class TanahYomyNoatebook extends AppCompatActivity {
     private EditText editTextNotebook;
     private SharedPreferences sharedPreferences;
     private static final String NOTE_KEY = "saved_note_2";
@@ -17,7 +17,7 @@ public class AmudYomyNoatebook extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_amud_yomy_noatebook);
+        setContentView(R.layout.tanah_yomy_noatebook);
 
         editTextNotebook = findViewById(R.id.editTextNotebook);
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
