@@ -20,7 +20,7 @@ public class RambamYomyNoatebook extends AppCompatActivity {
         setContentView(R.layout.activity_rambam_yomy_noatebook);
 
         editTextNotebook = findViewById(R.id.editTextNotebook);
-        Button buttonSaveNote = findViewById(R.id.buttonSaveNote):
+        Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
         buttonDelet = findViewById(R.id.buttonDelet);
 
         // טעינת ההערה השמורה
