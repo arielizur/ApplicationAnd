@@ -49,7 +49,7 @@ public class TanahYomyService extends Service {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String tanahYomi = jsonObject.getJSONArray("calendar_items")
                                 .getJSONObject(4)
-                                .getJSONObject("displayValue") // קבלת האובייקט
+                                .getJSONObject("displayValue")
                                 .getString("he"); //
 
                         updateNotification(tanahYomi);

@@ -14,8 +14,7 @@ import java.io.IOException;
 public class RambamYomyService extends Service {
     private static final int NOTIFICATION_ID = 2;
     private static final String CHANNEL_ID = "Rambam_yomy_channel";
-    private static final String API_URL = "https://www.sefaria.org/api/calendars"; // עדכן לפי ה-API שלך
-
+    private static final String API_URL = "https://www.sefaria.org/api/calendars";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,8 +48,8 @@ public class RambamYomyService extends Service {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String rambamYomi = jsonObject.getJSONArray("calendar_items")
                                 .getJSONObject(6)
-                                .getJSONObject("displayValue") // קבלת האובייקט
-                                .getString("he"); // שליפת הדף היומי בעברית
+                                .getJSONObject("displayValue")
+                                .getString("he");
 
                         updateNotification(rambamYomi);
                     } catch (Exception e) {

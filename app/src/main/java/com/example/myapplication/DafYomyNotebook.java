@@ -23,7 +23,6 @@ public class DafYomyNotebook extends AppCompatActivity {
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
         buttonDelet = findViewById(R.id.buttonDelet);
 
-        // טעינת ההערה השמורה
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
 

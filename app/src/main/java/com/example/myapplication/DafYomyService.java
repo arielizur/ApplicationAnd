@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.*;
 import android.content.Intent;
+import android.content.Context;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -10,7 +11,7 @@ import androidx.core.app.NotificationCompat;
 import okhttp3.*;
 import org.json.JSONObject;
 import java.io.IOException;
-
+import java.util.Calendar;
 public class DafYomyService extends Service {
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "daf_yomy_channel";
@@ -65,6 +66,8 @@ public class DafYomyService extends Service {
         Notification notification = getDafYomyNotification(dailyPage);
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.notify(NOTIFICATION_ID, notification);
+
+        scheduleNextUpdate();
     }
 
     private Notification getDafYomyNotification(String dailyPage) {
@@ -88,6 +91,34 @@ public class DafYomyService extends Service {
                 manager.createNotificationChannel(channel);
             }
         }
+    }
+
+    private void scheduleNextUpdate(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, DafYomyService.class);
+        PendingIntent pendingIntente = PendingIntent.getService(
+                this,
+                0, // requestCode
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntente
+        );
+
+        Log.d("DafYomyService", "Next update scheduled for: " + calendar.getTime());
     }
 
     @Nullable

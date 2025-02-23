@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
+import androidx.annotation.NonNull;
+import android.content.pm.PackageManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,26 +38,36 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // אתחול Switchים
+
         switchDafYomy = findViewById(R.id.switch2);
         switchRambamYomy = findViewById(R.id.switch3);
         switchTanahYomy = findViewById(R.id.switch7);
         switchMishnaYomit = findViewById(R.id.switch8);
 
-        // הגדרת מצבים מהעבר
+
         initSwitchState(switchDafYomy, "dafYomiSwitchState", DafYomyService.class);
         initSwitchState(switchRambamYomy, "rambamYomiSwitchState", RambamYomyService.class);
         initSwitchState(switchTanahYomy, "tanahYomiSwitchState", TanahYomyService.class);
         initSwitchState(switchMishnaYomit, "mishnaYomitSwitchState", MishnaYomitService.class);
 
-        // כפתורים לפתיחת פנקסים
+
         findViewById(R.id.button2).setOnClickListener(v -> openNotebook(DafYomyNotebook.class));
         findViewById(R.id.button3).setOnClickListener(v -> openNotebook(RambamYomyNoatebook.class));
         findViewById(R.id.button4).setOnClickListener(v -> openNotebook(TanahYomyNoatebook.class));
         findViewById(R.id.button5).setOnClickListener(v -> openNotebook(MishnaYomitNoatebook.class));
 
-        // כפתור לפתיחת תפריט
+
         findViewById(R.id.imageButton).setOnClickListener(this::showPopupWindow);
+
+        boolean isFirstLaunch = sharedPreferences.getBoolean("firstLaunch" , true);
+        if (isFirstLaunch){
+            requestNotificationPermission();
+            sharedPreferences.edit().putBoolean("firstLaunch", false).apply();
+        }
+
+        ImageButton buttonAboutApp = findViewById(R.id.imageButton2);
+        buttonAboutApp.setOnClickListener(v -> showAboutDialog());
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,7 +76,37 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // פונקציה לאתחול מצב Switch
+    private void showAboutDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("אודות האפליקציה")
+                .setMessage("זוהי אפליקציה ללימוד יומי של דף יומי, רמב״ם יומי, תנ״ך יומי ומשנה יומית.\n\n" +
+                        "באפשרותך להפעיל שירותי התראה לכל מסלול לימוד ולשמור הערות שונות לכל לימוד בלחיצה על הכפתור מחברת.")
+                .setPositiveButton("אישור", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // אנדרואיד 13 ומעלה
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("MainActivity", "הרשאת התרעות אושרה");
+            } else {
+                Log.d("MainActivity", "הרשאת התרעות נדחתה");
+            }
+        }
+    }
+
+
     private void initSwitchState(Switch switchButton, String key, Class<?> serviceClass) {
         boolean isSwitchOn = sharedPreferences.getBoolean(key, false);
         switchButton.setChecked(isSwitchOn);
@@ -86,12 +128,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // פונקציה לפתיחת Notebook
+
     private void openNotebook(Class<?> notebookClass) {
         startActivity(new Intent(MainActivity.this, notebookClass));
     }
 
-    // תפריט PopUp
+
     private void showPopupWindow(View view) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.popup_layout, null);
