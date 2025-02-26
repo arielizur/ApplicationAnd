@@ -14,7 +14,7 @@ import java.io.IOException;
 public class TanahYomyService extends Service {
     private static final int NOTIFICATION_ID = 3;
     private static final String CHANNEL_ID = "tanah_yomy_channel";
-    private static final String API_URL = "https://www.sefaria.org/api/calendars"; // עדכן לפי ה-API שלך
+    private static final String API_URL = "https://www.sefaria.org/api/calendars";
 
     @Override
     public void onCreate() {
@@ -48,7 +48,7 @@ public class TanahYomyService extends Service {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
                         String tanahYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(4)
+                                .getJSONObject(3)
                                 .getJSONObject("displayValue")
                                 .getString("he"); //
 

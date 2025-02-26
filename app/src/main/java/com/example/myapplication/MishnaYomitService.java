@@ -48,7 +48,7 @@ public class MishnaYomitService extends Service {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
                         String dafYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(5)
+                                .getJSONObject(4)
                                 .getJSONObject("displayValue")
                                 .getString("he");
                         updateNotification(dafYomi);

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">היהודי היומי</string>
+    <string name="default_web_client_id">הכנס_כאן_את_הערך</string>
+
 </resources>
