@@ -47,7 +47,7 @@ public class RambamYomyService extends Service {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
                         String rambamYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(6)
+                                .getJSONObject(5)
                                 .getJSONObject("displayValue")
                                 .getString("he");
 

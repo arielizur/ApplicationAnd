@@ -49,7 +49,7 @@ public class DafYomyService extends Service {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
                         String dafYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(3)
+                                .getJSONObject(2)
                                 .getJSONObject("displayValue") // קבלת האובייקט
                                 .getString("he"); // שליפת הדף היומי בעברית
 

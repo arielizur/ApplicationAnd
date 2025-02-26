@@ -48,7 +48,7 @@ public class TanahYomyService extends Service {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
                         String tanahYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(4)
+                                .getJSONObject(3)
                                 .getJSONObject("displayValue")
                                 .getString("he"); //
 
