@@ -15,7 +15,7 @@
         android:layout_height="70dp"
         android:layout_marginTop="27dp"
         android:layout_marginBottom="46dp"
-        android:text="מה תרצה להציג בהתרעה?"
+        android:text="מה תרצה להציג בהתראה?"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/switch2"
         app:layout_constraintEnd_toEndOf="parent"
