@@ -10,6 +10,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Date;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+
 
 public class DafYomyNotebook extends AppCompatActivity {
     private EditText editTextNotebook;
@@ -27,23 +35,33 @@ public class DafYomyNotebook extends AppCompatActivity {
         editTextNotebook = findViewById(R.id.editTextNotebook);
         Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
         buttonDelete = findViewById(R.id.buttonDelet);
-        buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
-        buttonDeleteCloud = findViewById(R.id.buttonSaveToCloud); // כפתור חדש למחיקת הערה מהענן
 
-        sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
-        editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
+        Button buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
 
-        // אתחול Firebase Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("notes");
+        buttonSaveToCloud.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                Toast.makeText(this, "יש להתחבר כדי לשמור", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        // אתחול ProgressDialog
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("שומר הערה...");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = user.getUid();
+            String notebookId = "notebook1"; // כל מחברת שונה תקבל שם אחר
+            String content = editTextNotebook.getText().toString();
 
-        buttonSaveNote.setOnClickListener(v -> saveNote());
-        buttonDelete.setOnClickListener(v -> deleteNote());
-        buttonSaveToCloud.setOnClickListener(v -> saveNoteToCloud());
-        buttonDeleteCloud.setOnClickListener(v -> deleteNoteFromCloud());
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("content", content);
+            data.put("timestamp", new Date());
+
+            db.collection("users").document(userId)
+                    .collection("notebooks").document(notebookId)
+                    .set(data)
+                    .addOnSuccessListener(unused -> Toast.makeText(this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "שגיאה: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        });
+
     }
 
     private void saveNote() {
