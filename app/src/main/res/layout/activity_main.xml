@@ -227,4 +227,19 @@
         app:srcCompat="@drawable/baseline_info_outline_24"
         tools:srcCompat="@drawable/baseline_info_outline_24" />
 
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="55dp"
+        android:layout_height="49dp"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.564"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.039"
+        app:srcCompat="@drawable/sharp_account_circle_24"
+        tools:srcCompat="@drawable/sharp_account_circle_24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
