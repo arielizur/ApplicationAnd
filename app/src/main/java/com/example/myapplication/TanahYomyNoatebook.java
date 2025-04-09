@@ -1,127 +1,103 @@
+
 package com.example.myapplication;
 
-import android.app.ProgressDialog;
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Date;
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class TanahYomyNoatebook extends AppCompatActivity {
-    private EditText editTextNotebook;
-    private SharedPreferences sharedPreferences;
-    private static final String NOTE_KEY = "saved_note_2";
-    private Button buttonDelet, buttonSaveToCloud, buttonDeleteCloud;
-    private DatabaseReference databaseReference;
-    private ProgressDialog progressDialog;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tanah_yomy_noatebook);
-
-        editTextNotebook = findViewById(R.id.editTextNotebook);
-        Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
-        buttonDelet = findViewById(R.id.buttonDelet);
+        private EditText editTextNotebook;
+        private SharedPreferences sharedPreferences;
+        private static final String NOTE_KEY = "saved_note_2";
+        private Button buttonDelet;
+        private Button buttonSaveToCloud;
+        private Button buttonLoadFromCloud;
 
 
-        sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
-        editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.tanah_yomy_noatebook);
 
-        buttonSaveNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String noteText = editTextNotebook.getText().toString();
-                sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
-            }
-        });
-        buttonDelet.setOnClickListener(v -> {
-            editTextNotebook.setText("");
-            sharedPreferences.edit().putString(NOTE_KEY, "").apply();
-        });
+            editTextNotebook = findViewById(R.id.editTextNotebook);
+            Button buttonSaveNote = findViewById(R.id.buttonSaveNote);
+            buttonDelet = findViewById(R.id.buttonDelet);
+            buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
+            buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
 
-        Button buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
+            // טעינת ההערה השמורה
+            sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
+            editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
 
-        buttonSaveToCloud.setOnClickListener(v -> {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user == null) {
-                Toast.makeText(this, "יש להתחבר כדי לשמור", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            buttonSaveNote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String noteText = editTextNotebook.getText().toString();
+                    sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
+                }
+            });
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String userId = user.getUid();
-            String notebookId = "notebook4"; // כל מחברת שונה תקבל שם אחר
-            String content = editTextNotebook.getText().toString();
+            buttonSaveToCloud.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("tanah_yomy");
 
+                    myRef.setValue(editTextNotebook.getText().toString());
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("content", content);
-            data.put("timestamp", new Date());
+                }
+            });
 
-            db.collection("users").document(userId)
-                    .collection("notebooks").document(notebookId)
-                    .set(data)
-                    .addOnSuccessListener(unused -> Toast.makeText(this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(this, "שגיאה: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        });
+            buttonLoadFromCloud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        String userId = user.getUid();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference userRef = database.getReference("users").child(userId).child("tanah_yomy");
 
-    }
+                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String value = dataSnapshot.getValue(String.class);
+                                if (value != null) {
+                                    editTextNotebook.setText(value);
+                                    sharedPreferences.edit().putString(NOTE_KEY, value).apply();
+                                } else {
+                                    editTextNotebook.setText("");
+                                }
+                            }
 
-    private void saveNote() {
-        String noteText = editTextNotebook.getText().toString().trim();
-        sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
-        Toast.makeText(this, "ההערה נשמרה!", Toast.LENGTH_SHORT).show();
-    }
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
+                    } else {
+                        editTextNotebook.setError("עליך להתחבר כדי לטעון מהענן");
+                    }
+                }
+            });
 
-    private void deleteNote() {
-        editTextNotebook.setText("");
-        sharedPreferences.edit().remove(NOTE_KEY).apply();
-        Toast.makeText(this, "ההערה נמחקה!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void saveNoteToCloud() {
-        String noteText = editTextNotebook.getText().toString().trim();
-        if (noteText.isEmpty()) {
-            Toast.makeText(this, "לא ניתן לשמור הערה ריקה", Toast.LENGTH_SHORT).show();
-            return;
+            buttonDelet.setOnClickListener(v -> {
+                editTextNotebook.setText("");
+                sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+            });
         }
-
-        progressDialog.show(); // הצגת טוען
-
-        String noteId = databaseReference.push().getKey();
-        if (noteId == null) {
-            Toast.makeText(this, "שגיאה ביצירת מזהה להערה", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        databaseReference.child(noteId).setValue(noteText)
-                .addOnSuccessListener(aVoid -> {
-                    progressDialog.dismiss();
-                    Toast.makeText(TanahYomyNoatebook.this, "ההערה נשמרה בענן!", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    Toast.makeText(TanahYomyNoatebook.this, "שגיאה בשמירת ההערה בענן", Toast.LENGTH_SHORT).show();
-                });
     }
-
-    private void deleteNoteFromCloud() {
-        databaseReference.removeValue()
-                .addOnSuccessListener(aVoid -> Toast.makeText(TanahYomyNoatebook.this, "כל ההערות נמחקו מהענן!", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(TanahYomyNoatebook.this, "שגיאה במחיקת ההערות מהענן", Toast.LENGTH_SHORT).show());
-    }
-}

@@ -74,13 +74,21 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ImageButton imageButton5 = findViewById(R.id.imageButton5);
+        imageButton5.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void showAboutDialog() {
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("אודות האפליקציה")
                 .setMessage("זוהי אפליקציה ללימוד יומי של דף יומי, רמב״ם יומי, תנ״ך יומי ומשנה יומית.\n\n" +
-                        "באפשרותך להפעיל שירותי התראה לכל מסלול לימוד ולשמור הערות שונות לכל לימוד בלחיצה על הכפתור מחברת.")
+                        "באפשרותך להפעיל שירותי התראה לכל מסלול לימוד ולשמור הערות שונות לכל לימוד בלחיצה על הכפתור מחברת.\n\n" +
+                        "מידע חשוב! לחיצה על כפתור 'שחזור מהענן' תחליף את הטקסט הקיים בטקסט ששמור בענן ולחיצה על 'שמירה בענן' תחליף את הטקסט ששמור בענן לטקסט הקיים")
                 .setPositiveButton("אישור", (dialog, which) -> dialog.dismiss())
                 .show();
     }

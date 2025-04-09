@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="כתוב כאן עד איפה למדת היום..."
         android:gravity="top"
+        android:hint="כתוב כאן מידע אודות הלימוד"
         android:inputType="textMultiLine"
         android:minLines="10" />
 
@@ -27,11 +27,28 @@
         android:layout_height="wrap_content"
         android:text="מחק" />
 
-    <Button
-        android:id="@+id/buttonSaveToCloud"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="שמור בענן" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
 
+
+        <Button
+            android:id="@+id/buttonSaveToCloud"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="שמור בענן" />
+
+        <Button
+            android:id="@+id/buttonLoadFromCloud"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="שחזור מהענן" />
+
+    </LinearLayout>
 
 </LinearLayout>

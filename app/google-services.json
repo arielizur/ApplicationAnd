@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1076385516586",
-    "project_id": "the-daily-jew",
-    "storage_bucket": "the-daily-jew.firebasestorage.app"
+    "project_number": "754095085253",
+    "project_id": "daily-jew",
+    "storage_bucket": "daily-jew.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1076385516586:android:a89588eedd9857e73a8753",
+        "mobilesdk_app_id": "1:754095085253:android:6dcd7e6909f0b9346b82ac",
         "android_client_info": {
           "package_name": "com.example.myapplication"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBg2Ooag_Ml1GVrvUCUxpmua-L-OmTOGFg"
+          "current_key": "AIzaSyB3QCtXhDGXNp9NgwNUuBNdAaw-tZll8uQ"
         }
       ],
       "services": {
