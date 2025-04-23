@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ public class RambamYomyNoatebook extends AppCompatActivity {
         buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
         buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
 
-        // טעינת ההערה השמורה
+
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
 
@@ -52,12 +51,18 @@ public class RambamYomyNoatebook extends AppCompatActivity {
 
         buttonSaveToCloud.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("rambam_yomy");
+            public void onClick(View v){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    String userId = user.getUid();
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference userRef = database.getReference("users").child(userId).child("rambam_yomy");
 
-                myRef.setValue(editTextNotebook.getText().toString());
-
+                    String noteText = editTextNotebook.getText().toString();
+                    userRef.setValue(noteText);
+                } else {
+                    editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
+                }
             }
         });
 

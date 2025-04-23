@@ -1,8 +1,6 @@
-
 package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,7 +26,6 @@ public class TanahYomyNoatebook extends AppCompatActivity {
         private Button buttonSaveToCloud;
         private Button buttonLoadFromCloud;
 
-
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -40,7 +37,6 @@ public class TanahYomyNoatebook extends AppCompatActivity {
             buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
             buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
 
-            // טעינת ההערה השמורה
             sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
             editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
 
@@ -55,11 +51,17 @@ public class TanahYomyNoatebook extends AppCompatActivity {
             buttonSaveToCloud.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("tanah_yomy");
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        String userId = user.getUid();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference userRef = database.getReference("users").child(userId).child("tanah_yomy");
 
-                    myRef.setValue(editTextNotebook.getText().toString());
-
+                        String noteText = editTextNotebook.getText().toString();
+                        userRef.setValue(noteText);
+                    } else {
+                        editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
+                    }
                 }
             });
 

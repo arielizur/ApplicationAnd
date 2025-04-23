@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,14 +37,8 @@ public class MishnaYomitNoatebook extends AppCompatActivity {
         buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
         buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
 
-        // טעינת ההערה השמורה
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("mishna_yomit");
-
-        myRef.setValue(editTextNotebook.getText().toString());
 
         buttonSaveNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,12 +50,18 @@ public class MishnaYomitNoatebook extends AppCompatActivity {
 
         buttonSaveToCloud.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("mishna_yomit");
+            public void onClick(View v)  {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    String userId = user.getUid();
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference userRef = database.getReference("users").child(userId).child("mysna_yomit");
 
-                myRef.setValue(editTextNotebook.getText().toString());
-
+                    String noteText = editTextNotebook.getText().toString();
+                    userRef.setValue(noteText);
+                } else {
+                    editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
+                }
             }
         });
 

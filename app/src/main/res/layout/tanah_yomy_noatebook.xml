@@ -40,14 +40,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="שמור בענן" />
+            android:text="גיבוי לענן" />
 
         <Button
             android:id="@+id/buttonLoadFromCloud"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="שחזור מהענן" />
+            android:text="שחזור גיבוי" />
 
     </LinearLayout>
 
