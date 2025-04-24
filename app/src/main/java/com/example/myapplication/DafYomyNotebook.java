@@ -62,6 +62,8 @@ public class DafYomyNotebook extends AppCompatActivity {
                 } else {
                     editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
                 }
+                String noteText = editTextNotebook.getText().toString();
+                sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
             }
         });
 

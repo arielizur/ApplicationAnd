@@ -84,6 +84,8 @@ public class TanahYomyNoatebook extends AppCompatActivity {
                                 } else {
                                     editTextNotebook.setText("");
                                 }
+                                String noteText = editTextNotebook.getText().toString();
+                                sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
                             }
 
                             @Override
@@ -97,9 +99,12 @@ public class TanahYomyNoatebook extends AppCompatActivity {
                 }
             });
 
-            buttonDelet.setOnClickListener(v -> {
-                editTextNotebook.setText("");
-                sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+            buttonDelet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editTextNotebook.setText("");
+                    sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+                }
             });
         }
     }

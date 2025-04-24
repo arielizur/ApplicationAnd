@@ -63,6 +63,8 @@ public class RambamYomyNoatebook extends AppCompatActivity {
                 } else {
                     editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
                 }
+                String noteText = editTextNotebook.getText().toString();
+                sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
             }
         });
 
@@ -98,9 +100,12 @@ public class RambamYomyNoatebook extends AppCompatActivity {
             }
         });
 
-        buttonDelet.setOnClickListener(v -> {
-            editTextNotebook.setText("");
-            sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+        buttonDelet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextNotebook.setText("");
+                sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+            }
         });
     }
 }
