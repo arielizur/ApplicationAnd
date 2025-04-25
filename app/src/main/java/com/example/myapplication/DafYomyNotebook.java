@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -41,10 +43,13 @@ public class DafYomyNotebook extends AppCompatActivity {
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
 
         buttonSaveNote.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
                 String noteText = editTextNotebook.getText().toString();
                 sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
+                Toast.makeText(DafYomyNotebook.this, "ההערה נשמרה!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -59,6 +64,7 @@ public class DafYomyNotebook extends AppCompatActivity {
 
                     String noteText = editTextNotebook.getText().toString();
                     userRef.setValue(noteText);
+                    Toast.makeText(DafYomyNotebook.this, "גיבוי נשמר!", Toast.LENGTH_SHORT).show();
                 } else {
                     editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
                 }
@@ -104,6 +110,7 @@ public class DafYomyNotebook extends AppCompatActivity {
             public void onClick(View v) {
                 editTextNotebook.setText("");
                 sharedPreferences.edit().putString(NOTE_KEY, "").apply();
+                Toast.makeText(DafYomyNotebook.this, "ההערה נמחקה!", Toast.LENGTH_SHORT).show();
             }
         });
     }
