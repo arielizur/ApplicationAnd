@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class DafYomyService extends Service {
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "daf_yomy_channel";
-    private static final String API_URL = "https://www.sefaria.org/api/calendars"; // עדכן לפי ה-API שלך
+    private static final String API_URL = "https://www.sefaria.org/api/calendars";
 
     @Override
     public void onCreate() {

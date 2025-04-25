@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Switch switchDafYomy, switchRambamYomy, switchTanahYomy, switchMishnaYomit;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "AppPrefs";
-    private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
+    private CheckBox checkBoxDafYomy, checkBoxRambamYomy, checkBoxTanahYomy, checkBoxMishnaYomit;
+
 
 
     @Override
@@ -43,25 +44,26 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        switchDafYomy = findViewById(R.id.switch2);
-        switchRambamYomy = findViewById(R.id.switch3);
-        switchTanahYomy = findViewById(R.id.switch7);
-        switchMishnaYomit = findViewById(R.id.switch8);
+        switchDafYomy = findViewById(R.id.switchDafYomy);
+        switchRambamYomy = findViewById(R.id.switchRambamYomy);
+        switchTanahYomy = findViewById(R.id.switchTanahYomy);
+        switchMishnaYomit = findViewById(R.id.switchMishnaYomit);
 
         initSwitchState(switchDafYomy, "dafYomiSwitchState", DafYomyService.class);
         initSwitchState(switchRambamYomy, "rambamYomiSwitchState", RambamYomyService.class);
         initSwitchState(switchTanahYomy, "tanahYomiSwitchState", TanahYomyService.class);
         initSwitchState(switchMishnaYomit, "mishnaYomitSwitchState", MishnaYomitService.class);
 
-        checkBox1 = findViewById(R.id.checkBox1);
-        checkBox2 = findViewById(R.id.checkBox2);
-        checkBox3 = findViewById(R.id.checkBox3);
-        checkBox4 = findViewById(R.id.checkBox4);
+        checkBoxDafYomy = findViewById(R.id.checkBoxDafYomy);
+        checkBoxRambamYomy = findViewById(R.id.checkBoxRambamYomy);
+        checkBoxTanahYomy = findViewById(R.id.checkBoxTanahYomy);
+        checkBoxMishnaYomit = findViewById(R.id.checkBoxMishnaYomit);
 
-        initCheckBox(checkBox1, "checkbox1_state", "checkbox1_last_update");
-        initCheckBox(checkBox2, "checkbox2_state", "checkbox2_last_update");
-        initCheckBox(checkBox3, "checkbox3_state", "checkbox3_last_update");
-        initCheckBox(checkBox4, "checkbox4_state", "checkbox4_last_update");
+        initCheckBox(checkBoxDafYomy, "checkbox1_state", "checkbox1_last_update");
+        initCheckBox(checkBoxRambamYomy, "checkbox2_state", "checkbox2_last_update");
+        initCheckBox(checkBoxTanahYomy, "checkbox3_state", "checkbox3_last_update");
+        initCheckBox(checkBoxMishnaYomit, "checkbox4_state", "checkbox4_last_update");
+
 
 
 
@@ -138,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("אודות האפליקציה")
                 .setMessage("זוהי אפליקציה ללימוד יומי של דף יומי, רמב״ם יומי, תנ״ך יומי ומשנה יומית.\n\n" +
                         "באפשרותך להפעיל שירותי התראה לכל מסלול לימוד ולשמור הערות שונות לכל לימוד בלחיצה על הכפתור 'הערות'.\n\n" +
-                        "מידע חשוב! לחיצה על כפתור 'שחזור גיבוי' תחליף את הטקסט הקיים בטקסט שגובה בעבר (אם לא גובה טקסט, הטקסט הקיים ימחק) ולחיצה על 'גיבוי לענן' תחליף את הגיבוי הקיים בגיבוי חדש")
+                        "מידע חשוב! לחיצה על כפתור 'שחזור גיבוי' תחליף את הטקסט הקיים בטקסט שגובה בעבר (אם לא גובה טקסט, הטקסט הקיים ימחק) ולחיצה על 'גיבוי לענן' תחליף את הגיבוי הקיים בגיבוי חדש. \n\n" +
+                        "(גירסה: 0.1)")
                 .setPositiveButton("אישור", null)
                 .show();
     }

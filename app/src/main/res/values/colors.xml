@@ -2,9 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="switch_thumb_on">#016F09</color> <!-- כחול כשה-Switch דולק -->
-    <color name="switch_thumb_off">#F6F65C5C</color> <!-- אפור כשה-Switch כבוי -->
-    <color name="switch_track_on">#FF889A</color> <!-- רקע כחול כשה-Switch דולק -->
-    <color name="switch_track_off">#D3D3D3</color> <!-- רקע אפור כשה-Switch כבוי -->
+    <color name="switch_thumb_on">#002BD3</color>
+    <color name="switch_thumb_off">#F6F65C5C</color>
+    <color name="switch_track_on">#FF889A</color> <!--  רקע -->
+    <color name="switch_track_off">#D3D3D3</color> <!-- רקע -->
+    <color name="buttonTextColor">#000000</color>
 
 </resources>

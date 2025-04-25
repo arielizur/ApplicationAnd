@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,7 @@ public class DafYomyNotebook extends AppCompatActivity {
     private Button buttonDelet;
     private Button buttonSaveToCloud;
     private Button buttonLoadFromCloud;
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +42,17 @@ public class DafYomyNotebook extends AppCompatActivity {
         buttonDelet = findViewById(R.id.buttonDelet);
         buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
         buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
+        backButton = findViewById(R.id.backButton);
 
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
+
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(DafYomyNotebook.this, MainActivity.class));
+            }
+        });
 
         buttonSaveNote.setOnClickListener(new View.OnClickListener() {
 
@@ -62,16 +74,26 @@ public class DafYomyNotebook extends AppCompatActivity {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference userRef = database.getReference("users").child(userId).child("daf_yomy");
 
-                    String noteText = editTextNotebook.getText().toString();
-                    userRef.setValue(noteText);
+                    final String noteText = editTextNotebook.getText().toString();
+                    userRef.setValue(noteText)
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "שמירה נכשלה", e);
+                                    Toast.makeText(DafYomyNotebook.this, "שמירה נכשלה!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    // נשמור גם ל-local
+                    sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
                     Toast.makeText(DafYomyNotebook.this, "גיבוי נשמר!", Toast.LENGTH_SHORT).show();
+
                 } else {
                     editTextNotebook.setError("עליך להתחבר כדי לשמור בענן");
                 }
-                String noteText = editTextNotebook.getText().toString();
-                sharedPreferences.edit().putString(NOTE_KEY, noteText).apply();
             }
         });
+
 
         buttonLoadFromCloud.setOnClickListener(new View.OnClickListener() {
             @Override

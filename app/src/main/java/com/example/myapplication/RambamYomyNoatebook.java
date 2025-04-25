@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.content.ContentValues.TAG;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class RambamYomyNoatebook extends AppCompatActivity {
     private Button buttonDelet;
     private Button buttonSaveToCloud;
     private Button buttonLoadFromCloud;
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,18 @@ public class RambamYomyNoatebook extends AppCompatActivity {
         buttonDelet = findViewById(R.id.buttonDelet);
         buttonSaveToCloud = findViewById(R.id.buttonSaveToCloud);
         buttonLoadFromCloud = findViewById(R.id.buttonLoadFromCloud);
+        backButton = findViewById(R.id.backButton);
 
 
         sharedPreferences = getSharedPreferences("NotebookPrefs", Context.MODE_PRIVATE);
         editTextNotebook.setText(sharedPreferences.getString(NOTE_KEY, ""));
+
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(RambamYomyNoatebook.this, MainActivity.class));
+            }
+        });
 
         buttonSaveNote.setOnClickListener(new View.OnClickListener() {
             @Override
