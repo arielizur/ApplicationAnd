@@ -27,16 +27,16 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MishnaYomitNoatebook"
+            android:name=".MishnaYomitNotebookActivity"
             android:exported="false" />
         <activity
-            android:name=".TanahYomyNoatebook"
+            android:name=".TanahYomyNotebookActivity"
             android:exported="false" />
         <activity
-            android:name=".RambamYomyNoatebook"
+            android:name=".RambamYomyNotebookActivity"
             android:exported="false" />
         <activity
-            android:name=".DafYomyNotebook"
+            android:name=".DafYomyNotebookActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
