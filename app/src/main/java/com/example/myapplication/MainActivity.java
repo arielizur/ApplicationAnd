@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         initSharedPreferences();
         initSwitches();
         initCheckBoxes();
-        initNotebookButtons();
+        initNotebookButtons(); // This will be updated
         initPopupMenu();
         handleFirstLaunch();
         initAboutButton();
@@ -103,31 +103,35 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Initializes the click listeners for the notebook buttons, directing to
-     * the respective notebook activities.
+     * the new generic NotebookActivity with specific keys.
      */
     private void initNotebookButtons() {
         findViewById(R.id.buttonDafYomy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNotebook(DafYomyNotebookActivity.class);
+                // Open NotebookActivity for Daf Yomi
+                openNotebook("dafYomiNote", "dafYomiNotes");
             }
         });
         findViewById(R.id.buttonRambamYomy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNotebook(RambamYomyNotebookActivity.class);
+                // Open NotebookActivity for Rambam Yomi
+                openNotebook("rambamYomiNote", "rambamYomiNotes");
             }
         });
-        findViewById(R.id.buttonTamahYomy).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonTamahYomy).setOnClickListener(new View.OnClickListener() { // Note: original ID was buttonTamahYomy
             @Override
             public void onClick(View v) {
-                openNotebook(TanahYomyNotebookActivity.class);
+                // Open NotebookActivity for Tanah Yomi
+                openNotebook("tanahYomiNote", "tanahYomiNotes");
             }
         });
         findViewById(R.id.buttonMishnaYomit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNotebook(MishnaYomitNotebookActivity.class);
+                // Open NotebookActivity for Mishna Yomit
+                openNotebook("mishnaYomitNote", "mishnaYomitNotes");
             }
         });
     }
@@ -302,6 +306,9 @@ public class MainActivity extends AppCompatActivity {
         switchButton.setChecked(isSwitchOn);
         final Intent serviceIntent = new Intent(this, serviceClass);
         if (isSwitchOn) {
+            // Note: For Android O and above, you must use startForegroundService()
+            // and ensure the service calls startForeground() within 5 seconds.
+            // Assuming your services handle this, or it's for older Android versions.
             ContextCompat.startForegroundService(this, serviceIntent);
         }
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -318,12 +325,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Opens a new activity representing a notebook.
+     * Opens the generic NotebookActivity with specific keys for local storage and Firebase path.
      *
-     * @param notebookClass The Class of the notebook activity to start.
+     * @param localKey The key for saving the note in SharedPreferences.
+     * @param firebasePath The path in Firebase Realtime Database for this note.
      */
-    private void openNotebook(Class<?> notebookClass) {
-        startActivity(new Intent(MainActivity.this, notebookClass));
+    private void openNotebook(String localKey, String firebasePath) {
+        Intent intent = new Intent(MainActivity.this, NotebookActivity.class);
+        intent.putExtra("localKey", localKey);
+        intent.putExtra("firebasePath", firebasePath);
+        startActivity(intent);
     }
 
     /**
