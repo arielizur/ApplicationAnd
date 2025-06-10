@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#6F00FFE8"
     android:backgroundTint="#27E2D0"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
     <TextView
         android:id="@+id/textViewWTV"

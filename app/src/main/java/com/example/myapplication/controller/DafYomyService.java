@@ -1,13 +1,15 @@
-package com.example.myapplication;
+package com.example.myapplication.controller;
 
 import android.app.*;
 import android.content.Intent;
-import android.content.Context;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.R;
+
 import okhttp3.*;
 import org.json.JSONObject;
 import java.io.IOException;
