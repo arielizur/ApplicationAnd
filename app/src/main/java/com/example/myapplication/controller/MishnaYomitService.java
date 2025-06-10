@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.controller;
 
 import android.app.*;
 import android.content.Intent;
@@ -7,28 +7,22 @@ import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.R;
+
 import okhttp3.*;
 import org.json.JSONObject;
 import java.io.IOException;
 
-/**
- * A foreground Android Service that displays the daily Rambam study notification.
- * It fetches the daily Rambam study from the Sefaria API and updates the notification with the result.
- */
-public class RambamYomyService extends Service {
 
-    /** ID for the notification shown in the foreground. */
-    private static final int NOTIFICATION_ID = 2;
-
-    /** ID for the notification channel. */
-    private static final String CHANNEL_ID = "Rambam_yomy_channel";
-
-    /** URL of the Sefaria API for daily calendar items. */
+public class MishnaYomitService extends Service {
+    private static final int NOTIFICATION_ID = 4;
+    private static final String CHANNEL_ID = "mishna_yomit_channel";
     private static final String API_URL = "https://www.sefaria.org/api/calendars";
 
     /**
-     * Called when the service is first created.
-     * Sets up the notification channel for Android O and above.
+     * Called when the service is created.
+     * Creates the notification channel if required (Android O and above).
      */
     @Override
     public void onCreate() {
@@ -38,25 +32,25 @@ public class RambamYomyService extends Service {
 
     /**
      * Called when the service is started.
-     * Begins the service in the foreground and fetches the daily Rambam study.
+     * Starts the service in the foreground with an initial notification and fetches the daily Mishna.
      *
-     * @param intent  The Intent that was used to start the service.
-     * @param flags   Additional data about this start request.
-     * @param startId A unique integer identifying this specific request to start.
-     * @return START_STICKY to indicate that the system should restart the service if it is killed.
+     * @param intent  The Intent that started the service
+     * @param flags   Additional data about the start request
+     * @param startId A unique integer representing this specific request to start
+     * @return START_STICKY to indicate that the system should try to recreate the service after it is killed
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(NOTIFICATION_ID, getRambamYomyNotification("Loading..."));
-        fetchRambamYomiFromAPI();
+        startForeground(NOTIFICATION_ID, getMishnaYomitNotification("טוען..."));
+        fetchMishnaYomitFromAPI();
         return START_STICKY;
     }
 
     /**
-     * Performs a network request to retrieve the daily Rambam study from the Sefaria API.
-     * On success, updates the notification with the study item.
+     * Performs an HTTP request to fetch the daily Mishna calendar from the API.
+     * Parses the JSON response and updates the notification with today's Mishna.
      */
-    private void fetchRambamYomiFromAPI() {
+    private void fetchMishnaYomitFromAPI() {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(API_URL)
@@ -65,7 +59,7 @@ public class RambamYomyService extends Service {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("RambamYomyService", "API request failed", e);
+                Log.e("MishnaYomitService", "API request failed", e);
             }
 
             @Override
@@ -74,14 +68,13 @@ public class RambamYomyService extends Service {
                     try {
                         String responseData = response.body().string();
                         JSONObject jsonObject = new JSONObject(responseData);
-                        String rambamYomi = jsonObject.getJSONArray("calendar_items")
-                                .getJSONObject(5)
+                        String dafYomi = jsonObject.getJSONArray("calendar_items")
+                                .getJSONObject(4)
                                 .getJSONObject("displayValue")
                                 .getString("he");
-
-                        updateNotification(rambamYomi);
+                        updateNotification(dafYomi);
                     } catch (Exception e) {
-                        Log.e("RambamYomyService", "JSON parsing error", e);
+                        Log.e("MishnaYomitService", "JSON parsing error", e);
                     }
                 }
             }
@@ -89,25 +82,25 @@ public class RambamYomyService extends Service {
     }
 
     /**
-     * Updates the existing notification with the given daily Rambam study text.
+     * Updates the existing notification with the provided daily Mishna text.
      *
-     * @param dailyPage The daily Rambam study item to display.
+     * @param dailyPage The text of today's daily Mishna
      */
     private void updateNotification(String dailyPage) {
-        Notification notification = getRambamYomyNotification(dailyPage);
+        Notification notification = getMishnaYomitNotification(dailyPage);
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.notify(NOTIFICATION_ID, notification);
     }
 
     /**
-     * Builds and returns a Notification object with the given text.
+     * Builds and returns a Notification object to display in the foreground service.
      *
-     * @param dailyPage The text to display in the notification.
-     * @return The constructed Notification.
+     * @param dailyPage The text to display in the notification
+     * @return A Notification object showing the daily Mishna
      */
-    private Notification getRambamYomyNotification(String dailyPage) {
+    private Notification getMishnaYomitNotification(String dailyPage) {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Today's Daily Rambam")
+                .setContentTitle("המשנה היומית להיום")
                 .setContentText(dailyPage)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setOngoing(true)
@@ -116,14 +109,13 @@ public class RambamYomyService extends Service {
     }
 
     /**
-     * Creates a notification channel for devices running Android O and above.
-     * This is required for displaying notifications on newer Android versions.
+     * Creates the notification channel for Android O and above.
+     * The channel defines the importance and behavior of notifications.
      */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Rambam Yomy Notifications",
+                    CHANNEL_ID, "Mishna Yomit Notifications",
                     NotificationManager.IMPORTANCE_LOW
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
@@ -136,8 +128,8 @@ public class RambamYomyService extends Service {
     /**
      * Binding is not supported for this service.
      *
-     * @param intent The intent used to bind to the service.
-     * @return Always returns null as this service does not support binding.
+     * @param intent The intent that was used to bind to this service
+     * @return Always returns null since binding is not allowed
      */
     @Nullable
     @Override

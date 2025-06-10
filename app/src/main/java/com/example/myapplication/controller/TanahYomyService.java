@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.controller;
 
 import android.app.*;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.R;
+
 import okhttp3.*;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -48,7 +51,7 @@ public class TanahYomyService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(NOTIFICATION_ID, getTanahYomyNotification("Loading..."));
+        startForeground(NOTIFICATION_ID, getTanahYomyNotification("טוען..."));
         fetchTanahYomiFromAPI();
         return START_STICKY;
     }
@@ -108,7 +111,7 @@ public class TanahYomyService extends Service {
      */
     private Notification getTanahYomyNotification(String dailyPage) {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Today's Tanach Yomi")
+                .setContentTitle("התנ”ך היומי להיום")
                 .setContentText(dailyPage)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setOngoing(true)

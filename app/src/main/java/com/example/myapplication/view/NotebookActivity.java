@@ -1,17 +1,16 @@
-package com.example.myapplication;
+package com.example.myapplication.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.model.Notebook;
+import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -139,7 +138,7 @@ public class NotebookActivity extends AppCompatActivity {
     private void saveNoteLocally() {
         String text = editTextNotebook.getText().toString();
         notebook.setNoteText(text);
-        Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "המחברת נשמרה!", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -148,7 +147,7 @@ public class NotebookActivity extends AppCompatActivity {
     private void deleteNoteLocally() {
         notebook.deleteNote();
         editTextNotebook.setText("");
-        Toast.makeText(this, "Note deleted!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "המחברת נמחקה!", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -158,13 +157,13 @@ public class NotebookActivity extends AppCompatActivity {
     private void saveNoteToCloud() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            editTextNotebook.setError("You must be logged in to save to the cloud");
+            editTextNotebook.setError("עליך להתחבר כדי ליצור גיבוי");
             return;
         }
         String text = editTextNotebook.getText().toString();
         notebook.setNoteText(text);
         notebook.saveNoteToCloud(user);
-        Toast.makeText(this, "Backup saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "גיבוי נשמר!", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -174,7 +173,7 @@ public class NotebookActivity extends AppCompatActivity {
     private void loadNoteFromCloud() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            editTextNotebook.setError("You must be logged in to load from the cloud");
+            editTextNotebook.setError("עליך להתחבר כדי לשחזר גיבוי");
             return;
         }
         notebook.loadNoteFromCloud(user,
@@ -186,7 +185,7 @@ public class NotebookActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 editTextNotebook.setText(notebook.getNoteText());
-                                Toast.makeText(NotebookActivity.this, "Load finished", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotebookActivity.this, "הגיבוי שוחזר!", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -198,7 +197,7 @@ public class NotebookActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(NotebookActivity.this, "Load failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotebookActivity.this, "פעולת השחזור נכשלה", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

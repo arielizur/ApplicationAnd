@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +23,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.myapplication.controller.DafYomyService;
+import com.example.myapplication.controller.MishnaYomitService;
+import com.example.myapplication.R;
+import com.example.myapplication.controller.RambamYomyService;
+import com.example.myapplication.controller.TanahYomyService;
+
 import java.util.Calendar;
 
 /**

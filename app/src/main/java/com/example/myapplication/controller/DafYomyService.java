@@ -1,13 +1,15 @@
-package com.example.myapplication;
+package com.example.myapplication.controller;
 
 import android.app.*;
 import android.content.Intent;
-import android.content.Context;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.R;
+
 import okhttp3.*;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -49,7 +51,7 @@ public class DafYomyService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(NOTIFICATION_ID, getDafYomyNotification("Loading..."));
+        startForeground(NOTIFICATION_ID, getDafYomyNotification("טוען..."));
         fetchDafYomiFromAPI();
         return START_STICKY;
     }
@@ -112,7 +114,7 @@ public class DafYomyService extends Service {
      */
     private Notification getDafYomyNotification(String dailyPage) {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Today's Daf Yomi")
+                .setContentTitle("הדף היומי להיום")
                 .setContentText(dailyPage)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setOngoing(true)

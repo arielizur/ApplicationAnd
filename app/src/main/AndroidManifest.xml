@@ -21,13 +21,13 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".NotebookActivity"
+            android:name=".view.NotebookActivity"
             android:exported="false" />
         <activity
             android:name=".Tyuta"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MishnaYomitNotebookActivity"
@@ -42,7 +42,7 @@
             android:name=".DafYomyNotebookActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,19 +52,19 @@
         </activity>
 
         <service
-            android:name=".DafYomyService"
+            android:name=".controller.DafYomyService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name=".RambamYomyService"
+            android:name=".controller.RambamYomyService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name=".TanahYomyService"
+            android:name=".controller.TanahYomyService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name=".MishnaYomitService"
+            android:name=".controller.MishnaYomitService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>
